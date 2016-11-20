@@ -14,16 +14,27 @@ class AdminController extends Controller
     protected $password;
 
     /**
-     * Matches /login
+     * @Route("/admin", name="admin")
+     */
+    public function indexAction()
+    {
+        //TODO;
+        return new Response(
+            '<html><body>Hello admin!</body></html>'
+        );
+    }
+
+    /**
+     * Matches /admin/login
      *
-     * @Route("/login", name="login")
+     * @Route("/admin/login", name="login")
      */
     public function loginAction($username, $password)
     {
-        $username = 'admin';
-        return $this->render('admin/index.html.twig', [
-            'message' => $username
-        ]);
+        //TODO;
+        return new Response(
+            '<html><body>Here are fields for entering username and password</body></html>'
+        );
     }
 
 }
