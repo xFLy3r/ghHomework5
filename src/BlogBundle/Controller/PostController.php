@@ -5,7 +5,8 @@ namespace BlogBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PostController extends Controller
 {
@@ -17,54 +18,82 @@ class PostController extends Controller
     /**
      * @Route("/", name="homepage")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('post/index.html.twig', [
-
-        ]);
+        $msg = 'Here is 10 posts from blog';
+        return new JsonResponse(array(
+            'msg' => $msg,
+        ));
     }
 
     /**
      * Matches /post/*
      *
-     * @Route("/post/{id}", name="post_show")
+     * @Route("/post/{id}", name="post_show", requirements={"id": "\d+"})
      */
-    public function showAction($id)
+    public function showAction(Request $request)
     {
-        return new Response(
-            '<html><body>Here is post  #'.$id.'</body></html>'
-        );
+        if($request->get('id') < 1 || $request->get('id') > 10) {
+            throw $this->createNotFoundException('Post #' . $request->get('id') . ' not found');
+        }
+        return new JsonResponse([
+            'blog' => [
+                'name' => 'post # ' . $request->get('id') ,
+                'text' => 'mytext # ' . $request->get('id'),
+            ]
+        ]);
     }
+
 
     /**
      * Matches /post/*
      *
      * @Route("/post/create", name="post_create")
      */
-    public function createAction ($name, $text)
+    public function createAction (Request $request)
     {
-        //TODO
+        if ($request->getMethod() == 'PUT') {
+            return new JsonResponse(array(
+                'name' => $request->get('name'),
+            ), 201);
+        }
+        return new JsonResponse(array(
+            'msg' => 'create',
+        ));
     }
 
     /**
      * Matches /post/*
      *
-     * @Route("/post/{id}/edit", name="post_edit")
+     * @Route("/post/{id}/edit", name="post_edit", requirements={"id": "\d+"})
      */
-    public function editAction ($id, $name, $text)
+    public function editAction (Request $request)
     {
-        //TODO
+        if ($request->getMethod() == 'PATCH') {
+            return new JsonResponse(array(
+                'msg' => 'Edited post #' . $request->get('id'),
+                'newname' => $request->get('name'),
+                'newtext' => $request->get('text'),
+            ));
+        }
+        return new JsonResponse(array(
+            'id' => $request->get('id')
+        ));
     }
 
     /**
      * Matches /post/*
      *
-     * @Route("/post/{id}/delete", name="post_delete")
+     * @Route("/post/{id}/delete", name="post_delete", requirements={"id": "\d+"})
      */
-    public function deleteAction ($id)
+    public function deleteAction (Request $request)
     {
-        //TODO
+        if ($request->getMethod() == 'DELETE') {
+            return new JsonResponse(array(
+                'msg' => 'Deleted post #' . $request->get('id'),
+            ));
+        }
+        return new JsonResponse();
     }
 
 }

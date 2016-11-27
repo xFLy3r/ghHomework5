@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 class AdminController extends Controller
@@ -29,12 +30,21 @@ class AdminController extends Controller
      *
      * @Route("/admin/login", name="login")
      */
-    public function loginAction($username, $password)
+    public function loginAction(Request $request)
     {
-        //TODO;
-        return new Response(
-            '<html><body>Here are fields for entering username and password</body></html>'
-        );
+        if (($request->get('login'))) {
+            if (($request->get('login') === 'admin') && ($request->get('password') === 'password')) {
+                return new JsonResponse([
+                    'admin' => [
+                        'login' => $request->get('login'),
+                        'password' => $request->get('password'),
+                    ]
+                ]);
+            } else {
+                throw $this->createAccessDeniedException('Access Denied');
+            }
+        }
+        return new JsonResponse();
     }
 
 }
