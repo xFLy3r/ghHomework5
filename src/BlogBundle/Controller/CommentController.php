@@ -21,7 +21,7 @@ class CommentController extends Controller
     public function showAction(Request $request)
     {
         if($request->get('idPost') < 1 || $request->get('idPost') > 10) {
-            throw $this->createNotFoundException('Post #' . $request->get('idPost') . ' not found');
+            throw $this->createNotFoundException('Comments for post #' . $request->get('idPost') . ' not found');
         }
         return new JsonResponse([
             'Comments' => [
@@ -40,7 +40,8 @@ class CommentController extends Controller
     {
         if ($request->getMethod() == 'PUT') {
         return new JsonResponse(array(
-            'name' => $request->get('name'),
+            'author' => $request->get('author'),
+            'text' => $request->get('text'),
         ), 201);
     }
         return new JsonResponse(array(
@@ -58,7 +59,7 @@ class CommentController extends Controller
         if ($request->getMethod() == 'PATCH') {
             return new JsonResponse(array(
                 'msg' => 'Edited comment #' . $request->get('idComment') . ' from post #' . $request->get('idPost'),
-                'newtext' => $request->get('text'),
+                'text' => $request->get('text'),
             ));
         }
         return new JsonResponse(array(
@@ -69,7 +70,7 @@ class CommentController extends Controller
     /**
      * Matches /post/*
      *
-     * @Route("/post/{idPost}/comment/{idComment}/delete", name="comment_delete", requirements={"idPost": "\d+", "idComment": "\d+"})
+     * @Route("/post/{idPost}/comment/{idComment}/remove", name="comment_delete", requirements={"idPost": "\d+", "idComment": "\d+"})
      */
     public function removeAction(Request $request)
     {

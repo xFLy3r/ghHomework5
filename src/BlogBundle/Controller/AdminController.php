@@ -17,12 +17,12 @@ class AdminController extends Controller
     /**
      * @Route("/admin", name="admin")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         //TODO;
-        return new Response(
-            '<html><body>Hello admin!</body></html>'
-        );
+        return new JsonResponse(array(
+            'msg' => 'Hello admin!'
+        ));
     }
 
     /**

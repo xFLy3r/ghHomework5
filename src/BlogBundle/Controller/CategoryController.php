@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 class CategoryController extends Controller
 {
@@ -21,7 +22,7 @@ class CategoryController extends Controller
      */
     public function indexAction()
     {
-        $msg = 'Here is 5 categories from blog';
+        $msg = 'Here is ' . rand(2, 6) . ' categories from blog';
         return new JsonResponse(array(
             'msg' => $msg,
         ));
@@ -85,7 +86,7 @@ class CategoryController extends Controller
     /**
      * Matches /category/*
      *
-     * @Route("/category/{id}/delete", name="category_delete", requirements={"id": "\d+"})
+     * @Route("/category/{id}/remove", name="category_delete", requirements={"id": "\d+"})
      */
     public function removeAction(Request $request)
     {

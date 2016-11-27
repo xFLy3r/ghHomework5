@@ -55,6 +55,7 @@ class PostController extends Controller
         if ($request->getMethod() == 'PUT') {
             return new JsonResponse(array(
                 'name' => $request->get('name'),
+                'text' => $request->get('text'),
             ), 201);
         }
         return new JsonResponse(array(
@@ -72,8 +73,8 @@ class PostController extends Controller
         if ($request->getMethod() == 'PATCH') {
             return new JsonResponse(array(
                 'msg' => 'Edited post #' . $request->get('id'),
-                'newname' => $request->get('name'),
-                'newtext' => $request->get('text'),
+                'name' => $request->get('name'),
+                'text' => $request->get('text'),
             ));
         }
         return new JsonResponse(array(
@@ -84,9 +85,9 @@ class PostController extends Controller
     /**
      * Matches /post/*
      *
-     * @Route("/post/{id}/delete", name="post_delete", requirements={"id": "\d+"})
+     * @Route("/post/{id}/remove", name="post_delete", requirements={"id": "\d+"})
      */
-    public function deleteAction (Request $request)
+    public function removeAction (Request $request)
     {
         if ($request->getMethod() == 'DELETE') {
             return new JsonResponse(array(
